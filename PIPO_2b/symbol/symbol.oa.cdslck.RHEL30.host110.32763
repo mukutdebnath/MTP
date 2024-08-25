@@ -1,0 +1,16 @@
+#
+# Edit Lock-Stake file. CAUTION: Please do not change.
+#
+# Information about current Edit Lock Owner.
+#
+LockStakeVersion               1.1
+LoginName                      20EE30037
+HostName                       host110
+ProcessIdentifier              32763
+ProcessCreationTime_UTC        1724565736
+ProcessCreationTime_Readable   Sun Aug 25 11:32:16 2024 IST
+AppIdentifier                  OA File System Design Manager
+OSType                         unix
+ReasonForPlacingEditLock       OpenAccess edit lock
+FilePathUsedToEditLock         /user_data1/mtech/20EE30037/work_tsmc_65/BTP_ahdl/PIPO_2b/symbol/symbol.oa.cdslck
+TimeEditLocked                 Sun Aug 25 18:51:19 2024 IST
