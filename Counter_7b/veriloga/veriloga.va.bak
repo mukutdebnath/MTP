@@ -1,0 +1,36 @@
+// VerilogA for BTP_ahdl, Counter_2b, veriloga
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+`define SIZE 2
+
+module Counter_7b(vclk, vout);
+input vclk;
+electrical vclk;
+output [`SIZE-1: 0] vout;
+electrical [`SIZE-1: 0] vout;
+
+parameter real setval = 0 from [0: (1<<`SIZE)-1];
+parameter real vlogic_high = 1.2;
+parameter real vlogic_low = 0;
+parameter real vtrans_clk = 1.2;
+parameter real vtrans = 1.2;
+parameter real tdel = 30p;
+parameter real trise = 30p;
+parameter real tfall = 30p;
+
+	integer x;
+
+	analog begin
+		@ (initial_step("static", "ac")) x = setval;
+		@ (cross( V(vclk) - vtrans_clk, +1 )) begin
+			x = ( x + 1 ) % (1<<`SIZE);
+		end
+
+		generate j (`SIZE-1, 0) begin
+			V(vout[j]) <+ transition( !(!(x & (1<<j)))*vlogic_high + !(x & (1<<j))*vlogic_low,
+			  						tdel, trise, tfall );
+		end
+	end
+endmodule
