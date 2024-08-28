@@ -1,3 +1,3 @@
 # MTP AHDL Files
 
-This is the repo where I will store all my MTP Verilog and VerilogA models.
+In this repo, all my MTP codes and results will be stored.
