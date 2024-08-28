@@ -1,0 +1,15 @@
+// VerilogA for BTP_ahdl, AnalogSubtractor, veriloga
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module AnalogSubtractor(vin1, vin2, vout);
+input vin1, vin2;
+output vout;
+electrical vin1, vin2, vout;
+
+	analog begin
+		V(vout) <+ V(vin1) - V(vin2);
+	end
+
+endmodule

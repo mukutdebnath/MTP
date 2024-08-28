@@ -1,0 +1,42 @@
+// VerilogA for BTP_ahdl, FullAdder_2b, veriloga
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+`define SIZE 2
+
+module FullSubtractor_2b(a, b, cin, sum, cout);
+input [`SIZE-1:0] a, b;
+electrical [`SIZE-1:0] a, b;
+input cin;
+electrical cin;
+output [`SIZE-1:0] sum;
+electrical [`SIZE-1:0] sum;
+output cout;
+electrical cout;
+
+parameter real vlogic_high = 1.2;
+parameter real vlogic_low = 0;
+parameter real vtrans = 0.6;
+parameter real tdel = 30p;
+parameter real trise = 30p;
+parameter real tfall = 30p;
+
+real carry_, sum_;
+
+	analog begin
+		carry_ = V(cin) > vtrans;
+		generate j (0, `SIZE-1) begin
+			sum_ = (V(a[j]) > vtrans) + (V(b[j]) > vtrans) + carry_;
+			if (sum_ >= 2) begin
+				carry_ = 1;
+				sum_ = (sum_ - 2);
+			end else begin
+				carry_ = 0;
+				sum_ = sum_;
+			end
+			V(sum[j]) <+ transition(sum_ * vlogic_high, tdel, trise, tfall);
+		end
+		V(cout) <+ transition(carry_ * vlogic_high, tdel, trise, tfall);
+	end
+endmodule
