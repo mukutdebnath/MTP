@@ -1,0 +1,30 @@
+// VerilogA for BTP_ahdl, Counter_Ideal, veriloga
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module Counter_Ideal(vclk, vdir, vout);
+input vclk, vdir;
+output vout;
+electrical vclk, vdir, vout;
+
+parameter real vtrans = 0.6;
+
+integer x, dir;
+
+analog begin
+	dir = V(vdir) > vtrans;
+	@ (initial_step) begin
+		x = 0;
+	end
+	@ (cross ( V(vclk) - vtrans, +1 )) begin
+		if ( dir == 0 ) begin
+			x = x + 1;
+		end else begin
+			x = x - 1;
+		end
+	end
+	V(vout) <+ x;
+end
+
+endmodule

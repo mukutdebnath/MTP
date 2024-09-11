@@ -1,0 +1,53 @@
+// VerilogA for BTP_ahdl, PFD, veriloga
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module PFD(vup, vdn, vin1, vin2);
+input vin1, vin2;
+output vup, vdn;
+electrical vup, vdn, vin1, vin2;
+
+parameter real vlogic_high = 1.2;
+parameter real vlogic_low = 0;
+parameter real vtrans_clk = 0.6;
+parameter real vtrans = 0.6;
+parameter real tdel = 30p;
+parameter real trise = 30p;
+parameter real tfall = 30p;
+
+
+integer state;
+integer outup, outdn;
+parameter IDLE = 0, UP = 1, DN = 2;
+
+analog begin
+	@ (initial_step) begin
+		state = IDLE;
+		outup = 0;
+		outdn = 0;
+			end
+	@ (cross( V(vin1) - vtrans_clk, +1 )) begin
+		if (state == IDLE) begin
+			state = UP;
+			outup = 1;			
+		end else if (state == DN) begin
+			state = IDLE;
+			outdn = 0;
+		end
+	end
+	@ (cross( V(vin2) - vtrans_clk, +1 )) begin
+		if (state == IDLE) begin
+			state = DN;
+			outdn = 1;
+		end else if (state == UP) begin
+			state = IDLE;
+			outup = 0;
+		end
+	end
+	V(vup) <+ transition( (outup==1) * vlogic_high + (outup==0) * vlogic_low, 
+							tdel, trsie, tfall);
+	V(vdn) <+ transition( (outdn==1) * vlogic_high + (outdn==0) * vlogic_low,
+							tdel, trise, tfall);
+end
+endmodule

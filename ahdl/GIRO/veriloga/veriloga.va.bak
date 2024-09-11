@@ -1,0 +1,33 @@
+// VerilogA for BTP_ahdl, GIRO, veriloga
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module GIRO(ven, sign, vout);
+input ven, sign;
+output vout;
+electrical ven, sign, vout;
+
+parameter real freq = 150M;
+parameter real vlogic_high = 1.2;
+parameter real vlogic_low  = 0;
+parameter real vtrans = 0.6;
+parameter real tdel = 30p from [0:inf);
+parameter real trise = 30p from (0:inf);
+parameter real tfall = 30p from (0:inf);
+
+real phase, phase_clipped;
+integer en;
+integer sn;
+
+analog begin
+	en = V(ven) > vtrans;
+	sn = -2*(V(sign) > vtrans) + 1;
+	@(initial_step) begin
+		phase = 0.0;
+	end
+	phase = idt(sn*en*freq, phase);
+	phase_clipped = phase % 1;
+	V(vout) <+ vlogic_high* ( phase_clipped > 0.5 );
+end
+endmodule

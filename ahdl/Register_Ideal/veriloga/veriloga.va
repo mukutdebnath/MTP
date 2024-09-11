@@ -1,0 +1,27 @@
+// VerilogA for BTP_ahdl, Register_Ideal, veriloga
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module Register_Ideal(vclk, vin, vout);
+input vclk, vin;
+output vout;
+electrical vclk, vin, vout;
+
+parameter real vtrans = 0.6;
+parameter real tdel = 30p from [0:inf);
+parameter real trise = 30p from (0:inf);
+parameter real tfall = 30p from (0:inf);
+
+integer x;
+
+analog begin
+	@ ( initial_step ) begin
+	x = 0;
+	end
+	@ (cross ( V(vclk) - vtrans, +1 )) begin
+		x = V(vin);
+	end
+	V(vout) <+ transition(x, tdel, trise, tfall);
+end
+endmodule
