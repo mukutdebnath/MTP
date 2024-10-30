@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # function to plot FFT from a single dataset with different signals in different columns
 def plot_FFT_va(data, preheader, param, paramcorr, paramunit, looplist, xlabel, ylabel, title, savename, xtextcorr, ytextcorr, dpi=600):
-    plt.figure()
+    plt.figure(figsize=(8,5))
     for va in looplist:
         col_x = preheader +  " (" + param + "=" + str(va) + ") X"
         col_y = preheader +  " (" + param + "=" + str(va) + ") Y"
@@ -28,7 +28,7 @@ def plot_FFT_va(data, preheader, param, paramcorr, paramunit, looplist, xlabel, 
 
 # function to plot time domain signals
 def plot_signal_va(data, preheader, param, paramcorr, paramunit, looplist, nsamples, xlabel, ylabel, title, savename, dpi=600):
-    plt.figure()
+    plt.figure(figsize=(8,5))
     for va in looplist:
         col_x = preheader +  " (" + param + "=" + str(va) + ") X"
         col_y = preheader +  " (" + param + "=" + str(va) + ") Y"
